@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Wealthify — Banking, simplified</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141414;
+    --ink-soft:#3c3a35;
+    --cream:#f2e6c9;
+    --cream-deep:#ecd9ac;
+    --blue:#d7e8f5;
+    --blue-deep:#bcdaef;
+    --tan:#f2e0b5;
+    --tan-deep:#e9cf8f;
+    --gray:#f3f3f3;
+    --white:#ffffff;
+    --green:#2f8f5b;
+    --green-bg:#e3f3e9;
+    --red:#c1503f;
+    --red-bg:#fbe9e6;
+    --pink:#f3d9ee;
+    --pink-deep:#eac2e4;
+    --radius-lg:22px;
+    --radius-md:14px;
+    --radius-sm:10px;
+    --shadow: 0 18px 45px -18px rgba(20,20,20,0.18);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top: env(safe-area-inset-top, 0px); height:100%;}
+  body{
+    margin:0;
+    font-family:'Space Grotesk', 'Sora', ui-sans-serif, system-ui, sans-serif;
+    background: radial-gradient(1200px 800px at 10% -10%, #f7ecd2 0%, var(--cream) 45%, var(--cream-deep) 100%);
+    color:var(--ink);
+    min-height:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--tan-deep); }
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .icon{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .icon-lg{ width:22px; height:22px; }
+  .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb{ background:#e2d3a8; border-radius:8px; }
+
+  /* shell */
+  .shell{
+    max-width:1440px;
+    margin: clamp(10px, 2.4vw, 28px) auto;
+    padding: 0 clamp(10px, 2.4vw, 28px);
+    display:flex;
+    gap: clamp(10px, 1.6vw, 20px);
+    align-items:flex-start;
+  }
+  .card{
+    background:var(--white);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+  }
+
+  /* sidebar */
+  .sidebar{
+    width:250px;
+    flex:0 0 250px;
+    overflow:hidden;
+    position:sticky;
+    top: clamp(10px, 2.4vw, 28px);
+  }
+  .sidebar-head{
+    background:var(--ink);
+    color:#fff;
+    padding:22px 20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg, var(--tan) 0%, var(--blue) 100%);
+    display:flex; align-items:center; justify-content:center;
+    flex:0 0 auto;
+  }
+  .brand-mark svg{ width:19px; height:19px; stroke:var(--ink); stroke-width:2.2; }
+  .brand-word{ font-weight:700; font-size:16.5px; letter-spacing:0.02em; }
+  .sidebar-body{ padding:16px 12px; }
+  .nav-item{
+    display:flex; align-items:center; gap:11px;
+    padding:11px 13px;
+    border-radius:12px;
+    color:#57534a;
+    font-size:14.5px;
+    font-weight:500;
+    margin-bottom:2px;
+    position:relative;
+    transition: background .15s ease, color .15s ease;
+  }
+  .nav-item:hover{ background:var(--gray); color:var(--ink); }
+  .nav-item.active{ background:var(--ink); color:#fff; }
+  .nav-item .icon{ flex:0 0 auto; }
+  .nav-badge{
+    margin-left:auto;
+    background:var(--red);
+    color:#fff;
+    font-size:10.5px;
+    font-weight:700;
+    min-width:18px; height:18px;
+    border-radius:999px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 5px;
+  }
+  .nav-item.active .nav-badge{ background:#fff; color:var(--ink); }
+  .sidebar-foot{
+    padding:8px 12px 18px;
+    border-top:1px solid #efece4;
+    margin-top:10px;
+  }
+
+  /* topbar */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 4px 4px 18px;
+  }
+  .page-title{ font-size:26px; font-weight:700; letter-spacing:-0.01em; }
+  .page-sub{ font-size:13.5px; color:#8a8577; margin-top:3px; font-weight:500; }
+  .topbar-actions{ display:flex; align-items:center; gap:8px; }
+  .icon-btn{
+    width:40px; height:40px; border-radius:999px;
+    background:var(--white);
+    border:1px solid #efe9d8;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink);
+    position:relative;
+    box-shadow: 0 2px 6px rgba(20,20,20,0.04);
+    transition: background .15s ease, color .15s ease, border-color .15s ease, transform .08s ease;
+  }
+  .icon-btn:hover{ background:var(--gray); }
+  .icon-btn:active{ transform:scale(0.93); }
+  .icon-btn.open{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .icon-btn.open .dot{ border-color:var(--ink); }
+  .icon-btn .dot{
+    position:absolute; top:8px; right:9px;
+    width:8px; height:8px; border-radius:999px;
+    background:var(--red); border:2px solid var(--white);
+  }
+  .avatar{
+    width:40px; height:40px; border-radius:999px;
+    background:linear-gradient(135deg,var(--tan),var(--pink));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:14px; color:var(--ink);
+    border:1px solid #efe9d8;
+  }
+
+  /* popovers */
+  .topbar-actions{ position:relative; }
+  .popover-wrap{ position:relative; }
+  .popover-panel{
+    position:absolute; top:48px; right:0;
+    width:300px; max-width:82vw;
+    background:var(--white); border-radius:16px;
+    box-shadow: 0 20px 50px -14px rgba(20,20,20,0.28);
+    border:1px solid #f0ebda;
+    padding:8px; z-index:40;
+    display:none;
+    animation: popIn .12s ease;
+  }
+  .popover-panel.open{ display:block; }
+  @keyframes popIn{ from{ opacity:0; transform:translateY(-4px);} to{ opacity:1; transform:translateY(0);} }
+  .popover-title{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#a49f8f; padding:8px 10px 4px; }
+  .popover-item{ display:flex; gap:10px; align-items:flex-start; padding:9px 10px; border-radius:11px; }
+  .popover-item:hover{ background:var(--gray); }
+  .popover-item-title{ font-size:13px; font-weight:600; }
+  .popover-item-sub{ font-size:12px; color:#9a9484; margin-top:1px; }
+  .popover-empty{ font-size:12.5px; color:#9a9484; padding:14px 10px; text-align:center; }
+  .popover-foot{ border-top:1px solid #f2eee2; margin-top:4px; padding-top:6px; }
+
+  /* modal */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,20,20,0.42);
+    display:none; align-items:center; justify-content:center; z-index:100;
+    padding:16px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:var(--white); border-radius:20px; padding:22px;
+    width:380px; max-width:100%;
+    box-shadow: 0 30px 70px -20px rgba(0,0,0,0.4);
+    animation: popIn .14s ease;
+  }
+  .field-label{ font-size:12.5px; font-weight:600; color:#57534a; margin-bottom:6px; display:block; }
+  .field{ margin-bottom:14px; }
+  .icon-choice-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .icon-choice{
+    width:38px; height:38px; border-radius:11px; border:1.5px solid #ece5d0;
+    display:flex; align-items:center; justify-content:center; background:#fbf9f3; color:#57534a;
+  }
+  .icon-choice.selected{ border-color:var(--ink); background:var(--ink); color:#fff; }
+
+  .main{ flex:1 1 auto; min-width:0; }
+  .content-card{ padding: clamp(16px,2.4vw,30px); }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 18px; border-radius:999px;
+    background:var(--ink); color:#fff; font-weight:600; font-size:13.5px;
+    border:none;
+  }
+  .btn:hover{ background:#2a2a2a; }
+  .btn-ghost{
+    background:transparent; color:var(--ink); border:1px solid #e7e1cf;
+  }
+  .btn-ghost:hover{ background:var(--gray); }
+  .btn-sm{ padding:8px 14px; font-size:12.5px; }
+
+  .pill{
+    display:inline-flex; align-items:center; gap:4px;
+    padding:4px 9px; border-radius:999px; font-size:12px; font-weight:700;
+  }
+  .pill-up{ background:var(--green-bg); color:var(--green); }
+  .pill-down{ background:var(--red-bg); color:var(--red); }
+  .tag{
+    padding:4px 10px; border-radius:999px; font-size:11.5px; font-weight:600;
+    background:var(--gray); color:#57534a;
+  }
+  .tag-paid{ background:var(--green-bg); color:var(--green); }
+  .tag-pending{ background:var(--tan); color:#8a6a1c; }
+  .tag-overdue{ background:var(--red-bg); color:var(--red); }
+  .tag-failed{ background:var(--red-bg); color:var(--red); }
+  .tag-completed{ background:var(--green-bg); color:var(--green); }
+
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:900px){ .grid-3{grid-template-columns:1fr 1fr;} }
+  @media (max-width:620px){ .grid-3{grid-template-columns:1fr;} .grid-2{grid-template-columns:1fr;} }
+
+  .acct-card{
+    border-radius:18px; padding:18px; min-height:132px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    position:relative; overflow:hidden;
+  }
+  .acct-card::after{
+    content:''; position:absolute; right:-30px; bottom:-30px;
+    width:120px; height:120px; border-radius:999px;
+    background:rgba(255,255,255,0.25);
+  }
+  .acct-label{ font-size:12.5px; font-weight:600; opacity:0.75; }
+  .acct-balance{ font-size:26px; font-weight:700; margin-top:4px; }
+  .acct-name{ font-size:13px; font-weight:600; }
+  .acct-num{ font-size:12px; opacity:0.7; }
+
+  .row{ display:flex; align-items:center; justify-content:space-between; padding:11px 2px; border-bottom:1px solid #f2eee2; }
+  .row:last-child{ border-bottom:none; }
+  .row-left{ display:flex; align-items:center; gap:11px; }
+  .avatar-sm{
+    width:38px; height:38px; border-radius:999px; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:13px;
+  }
+  .row-name{ font-size:14px; font-weight:600; }
+  .row-sub{ font-size:12px; color:#9a9484; margin-top:1px; }
+  .row-amt{ font-size:14px; font-weight:700; }
+  .up{ color:var(--green); } .down{ color:var(--red); }
+
+  .stock-card{
+    flex:0 0 auto; width:150px;
+    border:1px solid #f0ebda; border-radius:16px; padding:13px;
+    background:#fbf9f3;
+  }
+  .stock-icon{
+    width:32px; height:32px; border-radius:999px; background:var(--white);
+    border:1px solid #ece5d0; display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700; margin-bottom:10px;
+  }
+  .stock-name{ font-size:13px; font-weight:600; }
+  .stock-price{ font-size:12.5px; color:#8a8577; margin-top:6px; }
+
+  .sparkline{ width:100%; height:26px; margin-top:6px; }
+
+  .section-label{ font-size:16.5px; font-weight:700; letter-spacing:-0.01em; }
+
+  .input{
+    width:100%; padding:11px 14px 11px 40px; border-radius:12px;
+    border:1px solid #ece5d0; background:#fbf9f3; font-size:13.5px; font-family:inherit;
+    outline:none;
+  }
+  .input:focus{ border-color:#d8c692; }
+  .search-wrap{ position:relative; }
+  .search-wrap .icon{ position:absolute; left:13px; top:50%; transform:translateY(-50%); color:#9a9484; }
+
+  .table-head{ font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:#a49f8f; font-weight:700; }
+
+  .chip{
+    padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:600;
+    border:1px solid #ece5d0; background:#fff; color:#57534a;
+  }
+  .chip.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  .toggle{
+    width:42px; height:24px; border-radius:999px; background:#e5e0d0; position:relative; border:none; flex:0 0 auto;
+  }
+  .toggle.on{ background:var(--ink); }
+  .toggle .knob{
+    position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:999px; background:#fff;
+    transition:left .15s ease;
+  }
+  .toggle.on .knob{ left:21px; }
+
+  .goal-icon{
+    width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .progress-track{ width:100%; height:6px; border-radius:999px; background:#efe9d8; margin-top:8px; overflow:hidden; }
+  .progress-fill{ height:100%; border-radius:999px; }
+
+  .faq-item{ border-bottom:1px solid #f2eee2; padding:15px 2px; }
+  .faq-q{ display:flex; align-items:center; justify-content:between; gap:10px; cursor:pointer; font-weight:600; font-size:14.5px; }
+  .faq-a{ font-size:13.5px; color:#7a7568; margin-top:10px; line-height:1.6; display:none; }
+  .faq-item.open .faq-a{ display:block; }
+  .faq-item.open .chev{ transform:rotate(90deg); }
+  .chev{ transition:transform .15s ease; flex:0 0 auto; }
+
+  .hero-illustration{ width:150px; height:120px; }
+
+  @media (max-width: 880px){
+    .sidebar{ width:74px; flex:0 0 74px; }
+    .sidebar .brand-word, .sidebar .nav-item span:not(.icon):not(.nav-badge){ display:none; }
+    .sidebar-head{ justify-content:center; padding:18px 10px; }
+    .nav-item{ justify-content:center; }
+    .nav-item .nav-badge{ position:absolute; top:2px; right:2px; margin-left:0; }
+    .page-title{ font-size:21px; }
+  }
+
+  /* ---------- AUTH SCREEN ---------- */
+  .auth-wrap{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding: clamp(16px, 4vw, 40px);
+  }
+  .auth-card{
+    width:100%; max-width:960px;
+    display:grid; grid-template-columns:1fr 1fr;
+    background:var(--white);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    min-height:600px;
+  }
+  .auth-left{
+    background:
+      radial-gradient(420px 320px at 20% 15%, rgba(255,255,255,0.16), transparent 60%),
+      linear-gradient(150deg, var(--ink) 0%, #2a2a2a 55%, #1c1c1c 100%);
+    color:#fff;
+    padding: clamp(24px, 4vw, 44px);
+    display:flex; flex-direction:column; justify-content:space-between;
+    position:relative; overflow:hidden;
+  }
+  .auth-brand{ display:flex; align-items:center; gap:10px; position:relative; z-index:2; }
+  .auth-copy{ position:relative; z-index:2; margin:auto 0; padding:40px 0; }
+  .auth-headline{ font-size:clamp(24px,3vw,32px); font-weight:700; line-height:1.25; }
+  .auth-sub{ font-size:14px; color:#c9c4b7; margin-top:14px; max-width:320px; line-height:1.6; }
+  .auth-stats{ display:flex; gap:28px; position:relative; z-index:2; }
+  .auth-stat-num{ font-size:19px; font-weight:700; }
+  .auth-stat-label{ font-size:11.5px; color:#a7a294; margin-top:2px; }
+  .auth-blob{ position:absolute; border-radius:999px; filter:blur(2px); opacity:0.9; }
+  .auth-blob-1{ width:190px; height:190px; background:linear-gradient(135deg,var(--tan),var(--pink)); right:-70px; bottom:-70px; }
+  .auth-blob-2{ width:120px; height:120px; background:linear-gradient(135deg,var(--blue),var(--pink)); right:60px; top:-40px; opacity:0.35; }
+
+  .auth-right{ padding: clamp(24px, 4vw, 44px); display:flex; flex-direction:column; justify-content:center; }
+  .auth-toggle{
+    display:flex; background:var(--gray); border-radius:999px; padding:4px; margin-bottom:26px;
+  }
+  .auth-toggle-btn{
+    flex:1; border:none; background:transparent; padding:10px 0; border-radius:999px;
+    font-size:13.5px; font-weight:600; color:#8a8577;
+  }
+  .auth-toggle-btn.active{ background:var(--ink); color:#fff; }
+  .auth-row{ display:flex; align-items:center; justify-content:space-between; margin:-4px 0 16px; }
+  .auth-divider{
+    display:flex; align-items:center; gap:12px; margin:22px 0 16px;
+    color:#a49f8f; font-size:12px; font-weight:600;
+  }
+  .auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background:#efe9d8; }
+  .auth-social-row{ display:flex; gap:10px; }
+  .auth-switch{ text-align:center; font-size:13px; color:#7a7568; margin-top:22px; }
+  .auth-switch a{ font-weight:700; color:var(--ink); }
+  @media (max-width:760px){
+    .auth-card{ grid-template-columns:1fr; }
+    .auth-left{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div class="auth-wrap" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="brand-mark" id="authLogoMark"></div>
+        <span class="brand-word" style="color:#fff;">WEALTHIFY</span>
+      </div>
+      <div class="auth-copy">
+        <div class="auth-headline">Banking that moves<br/>as fast as you do.</div>
+        <div class="auth-sub">Track every account, card and goal in one calm, uncluttered place.</div>
+      </div>
+      <div class="auth-stats">
+        <div>
+          <div class="auth-stat-num">4.9<span style="font-size:14px;">/5</span></div>
+          <div class="auth-stat-label">App rating</div>
+        </div>
+        <div>
+          <div class="auth-stat-num">120k+</div>
+          <div class="auth-stat-label">Members</div>
+        </div>
+        <div>
+          <div class="auth-stat-num">$2.4B</div>
+          <div class="auth-stat-label">Managed</div>
+        </div>
+      </div>
+      <div class="auth-blob auth-blob-1"></div>
+      <div class="auth-blob auth-blob-2"></div>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-toggle">
+        <button class="auth-toggle-btn active" id="tabSignin" onclick="setAuthMode('signin')">Sign in</button>
+        <button class="auth-toggle-btn" id="tabSignup" onclick="setAuthMode('signup')">Create account</button>
+      </div>
+
+      <form id="authForm" onsubmit="handleAuthSubmit(event)">
+        <div class="field" id="fieldName" style="display:none;">
+          <label class="field-label">Full name</label>
+          <input class="input" style="padding-left:14px;" id="authName" placeholder="Bessie Ortiz" />
+        </div>
+        <div class="field">
+          <label class="field-label">Email address</label>
+          <input class="input" style="padding-left:14px;" id="authEmail" type="email" placeholder="you@email.com" />
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <input class="input" style="padding-left:14px;" id="authPassword" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" />
+        </div>
+        <div class="auth-row" id="rememberRow">
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#57534a;">
+            <input type="checkbox" checked style="accent-color:var(--ink); width:15px; height:15px;" /> Remember me
+          </label>
+          <a href="#" onclick="event.preventDefault()" style="font-size:13px; font-weight:600; color:var(--ink);">Forgot password?</a>
+        </div>
+        <div id="authError" style="display:none; color:var(--red); font-size:12.5px; margin:-4px 0 14px;">Enter a valid email and password to continue.</div>
+        <button type="submit" class="btn" style="width:100%; justify-content:center; padding:13px;" id="authSubmitBtn">Sign in</button>
+      </form>
+
+      <div class="auth-divider"><span>or continue with</span></div>
+      <div class="auth-social-row">
+        <button class="btn btn-ghost" style="flex:1; justify-content:center;" onclick="handleAuthSubmit()">Google</button>
+        <button class="btn btn-ghost" style="flex:1; justify-content:center;" onclick="handleAuthSubmit()">Apple</button>
+      </div>
+      <div class="auth-switch" id="authSwitchLine">
+        Don\u2019t have an account? <a href="#" onclick="event.preventDefault(); setAuthMode('signup');">Sign up free</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="appShell" style="display:none;">
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar card scrollbar-thin">
+    <div class="sidebar-head">
+      <div class="brand-mark" id="logoMark"></div>
+      <span class="brand-word">WEALTHIFY</span>
+    </div>
+    <nav class="sidebar-body" id="navList"></nav>
+    <div class="sidebar-foot" id="navFoot"></div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title" id="pageTitle">Overview</div>
+        <div class="page-sub" id="pageSub">Welcome back, Bessie</div>
+      </div>
+      <div class="topbar-actions">
+        <div class="popover-wrap">
+          <button class="icon-btn" title="Calendar" id="iconCalendar" onclick="togglePopover('calendar')"></button>
+          <div class="popover-panel" id="panel-calendar"></div>
+        </div>
+        <div class="popover-wrap">
+          <button class="icon-btn" title="Messages" id="iconMail" onclick="togglePopover('mail')"></button>
+          <div class="popover-panel" id="panel-mail"></div>
+        </div>
+        <div class="popover-wrap">
+          <button class="icon-btn" title="Notifications" id="iconBell" onclick="togglePopover('bell')"><span class="dot" id="bellDot"></span></button>
+          <div class="popover-panel" id="panel-bell"></div>
+        </div>
+        <div class="avatar" id="topAvatar">BO</div>
+      </div>
+    </div>
+    <div class="card content-card" id="page-outlet"></div>
+  </main>
+</div>
+</div>
+
+<div class="modal-overlay" id="goalModalOverlay" onclick="if(event.target===this) closeGoalModal()">
+  <div class="modal">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <div style="font-size:17px; font-weight:700;">New savings goal</div>
+      <button class="icon-btn" style="width:32px;height:32px;" onclick="closeGoalModal()" id="modalCloseIcon"></button>
+    </div>
+    <div class="field">
+      <label class="field-label">Goal name</label>
+      <input class="input" style="padding-left:14px;" id="goalName" placeholder="e.g. New laptop" />
+    </div>
+    <div class="field">
+      <label class="field-label">Icon</label>
+      <div class="icon-choice-row" id="goalIconRow"></div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label class="field-label">Already saved</label>
+        <input class="input" style="padding-left:14px;" id="goalHave" placeholder="0" inputmode="decimal" />
+      </div>
+      <div class="field">
+        <label class="field-label">Target amount</label>
+        <input class="input" style="padding-left:14px;" id="goalTarget" placeholder="1000" inputmode="decimal" />
+      </div>
+    </div>
+    <div id="goalError" style="display:none; color:var(--red); font-size:12.5px; margin-bottom:10px;">Please fill in a goal name and a target amount.</div>
+    <button class="btn" style="width:100%; justify-content:center;" onclick="submitGoal()">Create goal</button>
+  </div>
+</div>
+
+<script>
+/* ---------------- ICONS (hand-authored, 24x24, stroke) ---------------- */
+const ICONS = {
+  logo: `<svg viewBox="0 0 24 24"><path d="M3 16l5-6 4 4 7-9"/><path d="M14 5h5v5"/></svg>`,
+  grid: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+  swap: `<svg viewBox="0 0 24 24"><path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/></svg>`,
+  send: `<svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-3-6-7-2z"/></svg>`,
+  piggy: `<svg viewBox="0 0 24 24"><path d="M4 12a6 6 0 016-6h4a6 6 0 016 6v2a2 2 0 01-2 2h-1l-1 3h-3l-.5-2h-3l-.5 2H6l-1-3H4a1 1 0 01-1-1v-1z"/><circle cx="15" cy="10" r=".6" fill="currentColor" stroke="none"/><path d="M9 6V4"/></svg>`,
+  doc: `<svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>`,
+  card: `<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9.5h18"/><path d="M6.5 14.5h3"/></svg>`,
+  gear: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 000-3l1-1.7-1.7-1.7-1.7 1a1.7 1.7 0 00-3 0l-1-1.7-1.7 0-1 1.7a1.7 1.7 0 00-3 0l-1.7-1-1.7 1.7 1 1.7a1.7 1.7 0 000 3l-1 1.7 1.7 1.7 1.7-1a1.7 1.7 0 003 0l1 1.7h1.7l1-1.7a1.7 1.7 0 003 0l1.7 1 1.7-1.7z"/></svg>`,
+  help: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.5 2.5 0 114 2c-.9.7-1.5 1.3-1.5 2.4"/><circle cx="12" cy="17" r=".3" fill="currentColor" stroke="none"/></svg>`,
+  calendar: `<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>`,
+  mail: `<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>`,
+  bell: `<svg viewBox="0 0 24 24"><path d="M6 10a6 6 0 1112 0c0 4 1.4 5.5 2 6H4c.6-.5 2-2 2-6z"/><path d="M10 19a2 2 0 004 0"/></svg>`,
+  search: `<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg>`,
+  chevL: `<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>`,
+  chevR: `<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>`,
+  swap2: `<svg viewBox="0 0 24 24"><path d="M7 4v13M7 17l-3-3M7 17l3-3"/><path d="M17 20V7M17 7l3 3M17 7l-3 3"/></svg>`,
+  arrowUpRight: `<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>`,
+  upRight: `<svg viewBox="0 0 24 24"><path d="M6 18L18 6M10 6h8v8"/></svg>`,
+  downLeft: `<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 10V18H14"/></svg>`,
+  plane: `<svg viewBox="0 0 24 24"><path d="M2 15l19-8-8 19-2.5-7L2 15z"/></svg>`,
+  car: `<svg viewBox="0 0 24 24"><path d="M4 16l1.5-5.5A2 2 0 017.4 9h9.2a2 2 0 011.9 1.5L20 16"/><rect x="3" y="16" width="18" height="4" rx="1.5"/><circle cx="7.5" cy="20" r="1.3"/><circle cx="16.5" cy="20" r="1.3"/></svg>`,
+  gamepad: `<svg viewBox="0 0 24 24"><rect x="2.5" y="8" width="19" height="9" rx="4.5"/><path d="M7.5 11v3M6 12.5h3"/><circle cx="16" cy="11.5" r=".6" fill="currentColor" stroke="none"/><circle cx="18" cy="13.5" r=".6" fill="currentColor" stroke="none"/></svg>`,
+  layers: `<svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>`,
+  lock: `<svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg>`,
+  download: `<svg viewBox="0 0 24 24"><path d="M12 3v12M7.5 10.5L12 15l4.5-4.5"/><path d="M5 19h14"/></svg>`,
+  check: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>`,
+  clock: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>`,
+  x: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>`,
+  edit: `<svg viewBox="0 0 24 24"><path d="M4 20l1-4.2L15.5 5.3a1.5 1.5 0 012.2 0l1 1a1.5 1.5 0 010 2.2L8.2 19 4 20z"/></svg>`,
+  filter: `<svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>`,
+  star: `<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.7-4.3 4.1 1.1 5.9L12 16.7l-5.3 2.9 1.1-5.9-4.3-4.1 5.9-.7z"/></svg>`,
+  chat: `<svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>`,
+  phone: `<svg viewBox="0 0 24 24"><path d="M6 3h3l1.5 4-2 1.5a12 12 0 006.5 6.5L16.5 13l4 1.5V18a2 2 0 01-2 2C10.5 20 4 13.5 4 5a2 2 0 012-2z"/></svg>`,
+  freeze: `<svg viewBox="0 0 24 24"><path d="M12 2v20M4 7l16 10M20 7L4 17"/></svg>`,
+  wallet: `<svg viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 015.5 5H18a2 2 0 012 2v2"/><rect x="3" y="7.5" width="18" height="12" rx="2.5"/><circle cx="16.5" cy="13.5" r="1.2" fill="currentColor" stroke="none"/></svg>`,
+  trend: `<svg viewBox="0 0 24 24"><path d="M3 15l6-6 4 4 8-8"/><path d="M14 5h7v7"/></svg>`,
+  coffee: `<svg viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 01-5 5H9a5 5 0 01-5-5V9z"/><path d="M17 10h1.5a2.5 2.5 0 010 5H17"/><path d="M8 5c0 1-1 1-1 2M12 5c0 1-1 1-1 2"/></svg>`,
+  music: `<svg viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.4"/><circle cx="17" cy="15" r="2.4"/><path d="M9.4 17V5.5L19.4 4v10.5"/></svg>`,
+  film: `<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 4.5v15M17 4.5v15M3 9h4M17 9h4M3 15h4M17 15h4"/></svg>`,
+  box: `<svg viewBox="0 0 24 24"><path d="M3.5 7.5L12 3l8.5 4.5V16.5L12 21l-8.5-4.5V7.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>`,
+  appleFruit: `<svg viewBox="0 0 24 24"><path d="M12 8.5c-2.2-2.4-6-1.7-7 1.3-1.1 3.4.9 8.7 3.6 10.7 1.1.8 2.2.9 3.4.9s2.3-.1 3.4-.9c2.7-2 4.7-7.3 3.6-10.7-1-3-4.8-3.7-7-1.3z"/><path d="M12 8.5c0-2 .8-3.5 2.5-4.5"/></svg>`,
+  cross: `<svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/><circle cx="12" cy="12" r="9"/></svg>`,
+  burger: `<svg viewBox="0 0 24 24"><path d="M4 9.5a8 5 0 0116 0z"/><path d="M4 13.5h16M3.5 17h17"/></svg>`,
+  chip: `<svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M9.5 3.5v3.5M14.5 3.5v3.5M9.5 17v3.5M14.5 17v3.5M3.5 9.5H7M3.5 14.5H7M17 9.5h3.5M17 14.5h3.5"/></svg>`,
+  building: `<svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><path d="M4 21h16M9 21v-6h6v6"/></svg>`,
+  person: `<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>`,
+  hex: `<svg viewBox="0 0 24 24"><path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9L12 3z"/><path d="M12 9v6"/></svg>`,
+  shoppingBag: `<svg viewBox="0 0 24 24"><path d="M6 8h12l1 12H5L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>`,
+  logout: `<svg viewBox="0 0 24 24"><path d="M9 4H5.5A1.5 1.5 0 004 5.5v13A1.5 1.5 0 005.5 20H9"/><path d="M15 16l4-4-4-4"/><path d="M19 12H9"/></svg>`,
+};
+
+/* Icon + accent-color lookup for merchants, companies and people (used beside every name) */
+function entityMeta(name){
+  const map = {
+    'Starbucks': ['coffee', '#0b6b53'],
+    'Reddit': ['chat', '#ff4500'],
+    'Spotify': ['music', '#1db954'],
+    'Uber': ['car', '#111827'],
+    'Netflix': ['film', '#b30000'],
+    'Amazon': ['box', '#1a1a1a'],
+    'Apple': ['appleFruit', '#3a3a3a'],
+    'Apple.com': ['appleFruit', '#3a3a3a'],
+    'Adobe Inc': ['edit', '#e2263f'],
+    'Merck & Co': ['cross', '#0f5ea8'],
+    'McDonald\u2019s': ['burger', '#d1242c'],
+    'NVIDIA': ['chip', '#76b900'],
+    '3M': ['hex', '#8a6a1c'],
+    'Walt Disney': ['star', '#0f5ea8'],
+    'Chase Bank': ['building', '#111827'],
+    'PayPal': ['wallet', '#0b6b53'],
+    'City Power & Water': ['building', '#57534a'],
+    'Formhouse Fitness': ['star', '#3c3a35'],
+    'Shell Gas Station': ['car', '#d1242c'],
+    'Whole Foods': ['shoppingBag', '#0b6b53'],
+  };
+  if(map[name]) return map[name];
+  const companyHints = ['Co','LLC','Inc','Studio','Group','Bank','Fitness','Water','Loop','Field','&'];
+  if(companyHints.some(h => name.includes(h))) return ['building', '#57534a'];
+  return ['person', '#8a8577']; // fall back to a person silhouette for named individuals
+}
+function avatarHTML(name, bg, cls='avatar-sm'){
+  const [iconKey, fallbackBg] = entityMeta(name);
+  const background = bg || fallbackBg || '#8a8577';
+  return `<div class="${cls}" style="background:${background};"><span style="color:#fff; display:flex;">${icon(iconKey)}</span></div>`;
+}
+function icon(name, extra=''){ return (ICONS[name]||'').replace('<svg ', `<svg class="icon ${extra}" `); }
+
+/* ---------------- NAV CONFIG ---------------- */
+const NAV = [
+  { id:'overview', label:'Overview', icon:'grid' },
+  { id:'transactions', label:'Transactions', icon:'swap' },
+  { id:'payments', label:'Payments', icon:'send' },
+  { id:'deposits', label:'Deposits', icon:'piggy' },
+  { id:'invoices', label:'Invoices', icon:'doc', badge:3 },
+  { id:'cards', label:'Cards', icon:'card' },
+];
+const NAV_FOOT = [
+  { id:'settings', label:'Settings', icon:'gear' },
+  { id:'help', label:'Help center', icon:'help' },
+  { id:'logout', label:'Log out', icon:'logout', action:'logout' },
+];
+const TITLES = {
+  overview:['Overview','Welcome back, Bessie'],
+  transactions:['Transactions','Every payment, in and out'],
+  payments:['Payments','Send money and manage recipients'],
+  deposits:['Deposits','Grow your balance with interest'],
+  invoices:['Invoices','Track what you owe and what\u2019s owed'],
+  cards:['Cards','Manage your physical and virtual cards'],
+  settings:['Settings','Your profile and preferences'],
+  help:['Help center','Answers, fast'],
+};
+
+document.getElementById('logoMark').innerHTML = icon('logo','icon-lg');
+document.getElementById('iconCalendar').innerHTML = icon('calendar');
+document.getElementById('iconMail').innerHTML = icon('mail');
+document.getElementById('iconBell').innerHTML = icon('bell');
+document.getElementById('modalCloseIcon').innerHTML = icon('x');
+
+function buildNav(){
+  const list = document.getElementById('navList');
+  list.innerHTML = NAV.map(n => `
+    <a href="#/${n.id}" class="nav-item" data-id="${n.id}">
+      ${icon(n.icon)}<span>${n.label}</span>
+      ${n.badge ? `<span class="nav-badge">${n.badge}</span>` : ''}
+    </a>`).join('');
+  document.getElementById('navFoot').innerHTML = NAV_FOOT.map(n => n.action === 'logout' ? `
+    <a href="#" class="nav-item" onclick="event.preventDefault(); doLogout();">
+      ${icon(n.icon)}<span>${n.label}</span>
+    </a>` : `
+    <a href="#/${n.id}" class="nav-item" data-id="${n.id}">
+      ${icon(n.icon)}<span>${n.label}</span>
+    </a>`).join('');
+}
+buildNav();
+
+/* ---------------- MOCK DATA ---------------- */
+const ACCOUNTS = [
+  { type:'Debit card', name:'Bessie Ortiz', num:'9250', balance:'782.00', bg:'linear-gradient(135deg, var(--pink), var(--pink-deep))' },
+  { type:'Debit card', name:'Bessie Ortiz', num:'1406', balance:'442.00', bg:'linear-gradient(135deg, var(--tan), var(--tan-deep))' },
+  { type:'Credit card', name:'Bessie Ortiz', num:'3864', balance:'1503.90', bg:'linear-gradient(135deg, var(--blue), var(--blue-deep))' },
+];
+const STOCKS = [
+  { t:'DIS', name:'Walt Disney', price:'112.79', chg:-0.89, spark:[4,6,5,7,6,8,7,9,8,10] },
+  { t:'3M', name:'3M', price:'153.42', chg:1.10, spark:[8,7,9,8,10,9,11,10,12,13] },
+  { t:'MRK', name:'Merck & Co', price:'93.15', chg:0.98, spark:[3,5,4,6,5,7,6,8,7,9] },
+  { t:'MCD', name:'McDonald\u2019s', price:'304.29', chg:-1.31, spark:[9,8,10,7,9,6,8,5,7,6] },
+  { t:'AAPL', name:'Apple', price:'238.03', chg:1.58, spark:[5,6,8,7,9,10,9,11,12,13] },
+  { t:'NVDA', name:'NVIDIA', price:'114.06', chg:8.69, spark:[2,3,4,5,6,8,9,11,13,15] },
+];
+const TXNS = [
+  { n:'Starbucks', c:'Coffee', d:'17 Feb', amt:-12.50, initial:'S', bg:'#0b6b53' },
+  { n:'Reddit', c:'Subscription', d:'12 Feb', amt:-3.90, initial:'R', bg:'#ff4500' },
+  { n:'Ralph Collins', c:'Transfer', d:'21 Feb', amt:25.75, initial:'RC', bg:'#8a6a1c' },
+  { n:'Spotify', c:'Subscription', d:'18 Feb', amt:-14.99, initial:'S', bg:'#1db954' },
+  { n:'Uber', c:'Transport', d:'26 Feb', amt:-28.00, initial:'U', bg:'#111827' },
+  { n:'Debra Castillo', c:'Transfer', d:'21 Feb', amt:25.75, initial:'DC', bg:'#c1503f' },
+  { n:'Amazon', c:'Shopping', d:'24 Feb', amt:-64.20, initial:'A', bg:'#1a1a1a' },
+  { n:'Netflix', c:'Subscription', d:'20 Feb', amt:-15.49, initial:'N', bg:'#b30000' },
+];
+const SAVINGS = [
+  { name:'For traveling', icon:'plane', pct:32, have:'1,600', goal:'5,000', bg:'var(--blue)' },
+  { name:'Buy a car', icon:'car', pct:22, have:'7,300', goal:'12,000', bg:'var(--pink)' },
+  { name:'Sony PlayStation', icon:'gamepad', pct:78, have:'640', goal:'900', bg:'var(--tan)' },
+  { name:'Accumulations', icon:'layers', pct:41, have:'4,500', goal:'10,000', bg:'var(--gray)' },
+];
+const CATS = [
+  { name:'Supermarkets', pct:34, color:'#bcdaef' },
+  { name:'Restaurants', pct:24, color:'#e29a8c' },
+  { name:'Taxi', pct:18, color:'#8fbf9f' },
+  { name:'Clothes', pct:15, color:'#e9cf8f' },
+  { name:'Other', pct:9, color:'#c9c2e0' },
+];
+const PAYMENTS = [
+  { name:'Landlord \u2014 Rent', to:'Marcus Hale', d:'1 Mar', amt:950.00, status:'pending', initial:'MH', bg:'#8a6a1c' },
+  { name:'Studio subscription', to:'Adobe Inc', d:'28 Feb', amt:54.99, status:'completed', initial:'A', bg:'#e2263f' },
+  { name:'Freelance payout', to:'Nina Torres', d:'26 Feb', amt:620.00, status:'completed', initial:'NT', bg:'#0b6b53' },
+  { name:'Utilities', to:'City Power & Water', d:'24 Feb', amt:118.40, status:'failed', initial:'CP', bg:'#c1503f' },
+  { name:'Gym membership', to:'Formhouse Fitness', d:'20 Feb', amt:45.00, status:'completed', initial:'FF', bg:'#3c3a35' },
+];
+const RECIPIENTS = [
+  { name:'Marcus Hale', role:'Landlord', initial:'MH', bg:'#8a6a1c' },
+  { name:'Nina Torres', role:'Contractor', initial:'NT', bg:'#0b6b53' },
+  { name:'Priya Nair', role:'Sister', initial:'PN', bg:'#c1503f' },
+  { name:'Formhouse Fitness', role:'Merchant', initial:'FF', bg:'#3c3a35' },
+];
+const DEPOSITS = [
+  { name:'High-yield savings', rate:'4.20%', balance:'8,240.00', term:'Flexible', spark:[3,4,4,5,6,6,7,8,8,9] },
+  { name:'12-month fixed', rate:'5.05%', balance:'12,000.00', term:'Matures Dec 2026', spark:[4,4,5,5,6,6,7,7,8,8] },
+  { name:'Goal builder', rate:'3.60%', balance:'2,180.00', term:'Flexible', spark:[2,3,3,4,4,5,5,6,6,7] },
+];
+const DEPOSIT_HISTORY = [
+  { n:'Auto-transfer', d:'1 Mar', amt:200.00 },
+  { n:'Interest paid', d:'28 Feb', amt:31.20 },
+  { n:'Manual top-up', d:'15 Feb', amt:500.00 },
+  { n:'Auto-transfer', d:'1 Feb', amt:200.00 },
+];
+const INVOICES = [
+  { id:'INV-0231', client:'Bramwell Studio', d:'Due 2 Mar', amt:1450.00, status:'pending' },
+  { id:'INV-0230', client:'Nova Retail Co', d:'Paid 22 Feb', amt:860.00, status:'paid' },
+  { id:'INV-0229', client:'Anders & Field', d:'Overdue \u2014 was due 10 Feb', amt:2100.00, status:'overdue' },
+  { id:'INV-0228', client:'Studio Loop', d:'Paid 8 Feb', amt:540.00, status:'paid' },
+  { id:'INV-0227', client:'Marchetti LLC', d:'Paid 30 Jan', amt:1975.00, status:'paid' },
+];
+const CARD_TXNS = [
+  { n:'Whole Foods', d:'Today, 9:40 AM', amt:-64.12, card:'\u2022\u2022 9250' },
+  { n:'Shell Gas Station', d:'Yesterday', amt:-42.00, card:'\u2022\u2022 1406' },
+  { n:'Apple.com', d:'2 days ago', amt:-9.99, card:'\u2022\u2022 3864' },
+];
+const FAQS = [
+  { q:'How do I reset my password?', a:'Go to Settings \u2192 Security and select \u201cChange password.\u201d We\u2019ll send a confirmation to your registered email before the change takes effect.' },
+  { q:'How long do transfers take?', a:'Transfers between Wealthify accounts are instant. Transfers to external banks typically arrive within 1\u20132 business days.' },
+  { q:'How do I freeze a lost card?', a:'Open Cards, select the card, and tap Freeze card. Your card is disabled immediately and you can unfreeze it any time.' },
+  { q:'Can I dispute a transaction?', a:'Open the transaction from Transactions or Cards, select \u201cReport an issue,\u201d and follow the prompts. Most disputes are resolved within 5 business days.' },
+  { q:'Is my money insured?', a:'Yes. Balances held with Wealthify are covered up to the standard deposit insurance limit in your region.' },
+];
+const UPCOMING_EVENTS = [
+  { title:'Rent payment due', sub:'To Marcus Hale \u00b7 $950.00', date:'Mar 1' },
+  { title:'Invoice INV-0231 due', sub:'Bramwell Studio \u00b7 $1,450.00', date:'Mar 2' },
+  { title:'Gym membership renews', sub:'Formhouse Fitness \u00b7 $45.00', date:'Mar 20' },
+  { title:'12-month deposit matures', sub:'Fixed term account', date:'Dec 2026' },
+];
+const MESSAGES = [
+  { from:'Wealthify', preview:'Your February statement is ready to view.', time:'2h ago', bg:'#141414' },
+  { from:'Nina Torres', preview:'Thanks so much for the quick payout!', time:'5h ago', bg:'#0b6b53' },
+  { from:'Support Team', preview:'Your dispute on INV-0229 is being reviewed.', time:'1d ago', bg:'#8a6a1c' },
+];
+const NOTIFICATIONS = [
+  { title:'Payment received', desc:'Ralph Collins sent you $25.75', time:'21 Feb', icon:'downLeft', tone:'up' },
+  { title:'Card frozen', desc:'Card \u2022\u2022 3864 was frozen from Cards', time:'19 Feb', icon:'freeze', tone:null },
+  { title:'Invoice overdue', desc:'INV-0229 from Anders & Field is overdue', time:'18 Feb', icon:'doc', tone:'down' },
+  { title:'Interest paid', desc:'+$31.20 added to your 12-month fixed deposit', time:'15 Feb', icon:'piggy', tone:'up' },
+];
+const GOAL_ICONS = ['plane','car','gamepad','layers','star','wallet'];
+let selectedGoalIcon = GOAL_ICONS[0];
+
+/* ---------------- POPOVERS ---------------- */
+function renderPopovers(){
+  document.getElementById('panel-calendar').innerHTML = `
+    <div class="popover-title">Upcoming</div>
+    ${UPCOMING_EVENTS.map(e=>`
+      <div class="popover-item">
+        <div class="goal-icon" style="width:32px;height:32px;background:var(--tan);flex:0 0 auto;">${icon('calendar')}</div>
+        <div style="flex:1;">
+          <div class="popover-item-title">${e.title}</div>
+          <div class="popover-item-sub">${e.sub}</div>
+        </div>
+        <div class="popover-item-sub" style="white-space:nowrap;">${e.date}</div>
+      </div>`).join('')}`;
+
+  document.getElementById('panel-mail').innerHTML = `
+    <div class="popover-title">Messages</div>
+    ${MESSAGES.map(m=>`
+      <div class="popover-item">
+        ${avatarHTML(m.from, m.bg)}
+        <div style="flex:1; min-width:0;">
+          <div style="display:flex; justify-content:space-between; gap:8px;">
+            <div class="popover-item-title">${m.from}</div>
+            <div class="popover-item-sub" style="white-space:nowrap;">${m.time}</div>
+          </div>
+          <div class="popover-item-sub" style="white-space:normal;">${m.preview}</div>
+        </div>
+      </div>`).join('')}
+    <div class="popover-foot"><button class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;">View all messages</button></div>`;
+
+  document.getElementById('panel-bell').innerHTML = `
+    <div class="popover-title">Notifications</div>
+    ${NOTIFICATIONS.map(n=>`
+      <div class="popover-item">
+        <div class="goal-icon" style="width:32px;height:32px;background:${n.tone==='up'?'var(--green-bg)':n.tone==='down'?'var(--red-bg)':'var(--gray)'};color:${n.tone==='up'?'var(--green)':n.tone==='down'?'var(--red)':'#57534a'};flex:0 0 auto;">${icon(n.icon)}</div>
+        <div style="flex:1;">
+          <div class="popover-item-title">${n.title}</div>
+          <div class="popover-item-sub">${n.desc}</div>
+        </div>
+        <div class="popover-item-sub" style="white-space:nowrap;">${n.time}</div>
+      </div>`).join('')}`;
+}
+renderPopovers();
+
+function togglePopover(name){
+  const panel = document.getElementById('panel-'+name);
+  const btn = document.getElementById('icon'+name.charAt(0).toUpperCase()+name.slice(1));
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.popover-panel').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.icon-btn').forEach(b=>b.classList.remove('open'));
+  if(!isOpen){
+    panel.classList.add('open');
+    if(btn) btn.classList.add('open');
+  }
+  if(name === 'bell'){
+    const dot = document.getElementById('bellDot');
+    if(dot) dot.remove();
+  }
+}
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('.popover-wrap')){
+    document.querySelectorAll('.popover-panel').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.icon-btn').forEach(b=>b.classList.remove('open'));
+  }
+});
+
+/* ---------------- NEW GOAL MODAL ---------------- */
+function openGoalModal(){
+  document.querySelectorAll('.popover-panel').forEach(p=>p.classList.remove('open'));
+  selectedGoalIcon = GOAL_ICONS[0];
+  document.getElementById('goalIconRow').innerHTML = GOAL_ICONS.map(k=>
+    `<button type="button" class="icon-choice ${k===selectedGoalIcon?'selected':''}" data-icon="${k}" onclick="pickGoalIcon('${k}')">${icon(k)}</button>`
+  ).join('');
+  document.getElementById('goalName').value = '';
+  document.getElementById('goalHave').value = '';
+  document.getElementById('goalTarget').value = '';
+  document.getElementById('goalError').style.display = 'none';
+  document.getElementById('goalModalOverlay').classList.add('open');
+}
+function closeGoalModal(){
+  document.getElementById('goalModalOverlay').classList.remove('open');
+}
+function pickGoalIcon(k){
+  selectedGoalIcon = k;
+  document.querySelectorAll('.icon-choice').forEach(b=>b.classList.toggle('selected', b.dataset.icon===k));
+}
+function submitGoal(){
+  const name = document.getElementById('goalName').value.trim();
+  const target = parseFloat(document.getElementById('goalTarget').value);
+  const have = parseFloat(document.getElementById('goalHave').value) || 0;
+  if(!name || !target || target <= 0){
+    document.getElementById('goalError').style.display = 'block';
+    return;
+  }
+  const pct = Math.min(100, Math.round((have/target)*100));
+  const bgOptions = ['var(--blue)','var(--pink)','var(--tan)','var(--gray)'];
+  SAVINGS.unshift({
+    name, icon: selectedGoalIcon, pct,
+    have: have.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}),
+    goal: target.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}),
+    bg: bgOptions[SAVINGS.length % bgOptions.length],
+  });
+  closeGoalModal();
+  router();
+}
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeGoalModal();
+});
+
+/* ---------------- HELPERS ---------------- */
+const fmt = n => (n<0?'\u2212':'+') + '$' + Math.abs(n).toFixed(2);
+const fmtPlain = n => '$' + Number(n).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
+
+function sparklineSVG(points, color){
+  const w=120,h=26,max=Math.max(...points),min=Math.min(...points);
+  const step = w/(points.length-1);
+  const norm = v => h - ((v-min)/(max-min||1))*h;
+  const d = points.map((p,i)=>`${i===0?'M':'L'}${(i*step).toFixed(1)},${norm(p).toFixed(1)}`).join(' ');
+  return `<svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function donutSVG(cats){
+  const r=52, cx=64, cy=64, circ=2*Math.PI*r;
+  let offset=0;
+  const arcs = cats.map(c=>{
+    const len = circ*(c.pct/100);
+    const seg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${c.color}" stroke-width="16" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" stroke-linecap="butt" transform="rotate(-90 ${cx} ${cy})"/>`;
+    offset += len;
+    return seg;
+  }).join('');
+  return `<svg width="128" height="128" viewBox="0 0 128 128">${arcs}</svg>`;
+}
+
+/* ---------------- PAGE RENDERERS ---------------- */
+function renderOverview(){
+  const total = ACCOUNTS.reduce((s,a)=>s+parseFloat(a.balance),0);
+  return `
+  <div class="grid-2" style="grid-template-columns:1.65fr 1fr; align-items:start;">
+    <div style="min-width:0;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:16px;">
+        <div>
+          <div class="page-sub" style="margin-bottom:2px;">Total balance</div>
+          <div style="font-size:32px; font-weight:700;">${fmtPlain(total)}</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="icon-btn">${icon('plus')}</button>
+          <button class="icon-btn">${icon('swap2')}</button>
+          <button class="icon-btn">${icon('upRight')}</button>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:26px;">
+        ${ACCOUNTS.map(a=>`
+          <div class="acct-card" style="background:${a.bg};">
+            <div>
+              <div class="acct-label">${a.type}</div>
+              <div class="acct-balance">${icon('logo','icon-lg').replace('<svg','<svg style="width:16px;height:16px;display:inline;vertical-align:-2px;margin-right:2px;"')}${a.balance}</div>
+            </div>
+            <div>
+              <div class="acct-name">${a.name}</div>
+              <div class="acct-num">\u2022\u2022 ${a.num}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <div class="section-label">My stocks</div>
+        <div style="display:flex; gap:6px;">
+          <button class="icon-btn" style="width:32px;height:32px;" onclick="scrollStocks(-1)">${icon('chevL')}</button>
+          <button class="icon-btn" style="width:32px;height:32px;" onclick="scrollStocks(1)">${icon('chevR')}</button>
+        </div>
+      </div>
+      <div id="stockRow" class="scrollbar-thin" style="display:flex; gap:12px; overflow-x:auto; padding-bottom:8px; margin-bottom:26px;">
+        ${STOCKS.map(s=>`
+          <div class="stock-card">
+            <div class="stock-icon" style="background:${entityMeta(s.name)[1]||'#efe9d8'}; color:#fff;">${icon(entityMeta(s.name)[0])}</div>
+            <div class="stock-name">${s.name}</div>
+            <div class="stock-price">${fmtPlain(s.price)}</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
+              <span class="pill ${s.chg>=0?'pill-up':'pill-down'}">${s.chg>=0?'+':''}${s.chg}%</span>
+            </div>
+            ${sparklineSVG(s.spark, s.chg>=0?'#2f8f5b':'#c1503f')}
+          </div>`).join('')}
+      </div>
+
+      <div class="grid-2">
+        <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <div class="section-label">Monthly statistics</div>
+            <button class="chip">February <span style="margin-left:4px;">\u25be</span></button>
+          </div>
+          <div style="display:flex; align-items:center; gap:18px;">
+            <div style="position:relative;">
+              ${donutSVG(CATS)}
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                <div style="font-weight:700; font-size:14px;">$1,492.72</div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              ${CATS.map(c=>`<div style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#57534a;"><span style="width:8px;height:8px;border-radius:999px;background:${c.color};display:inline-block;"></span>${c.name}</div>`).join('')}
+            </div>
+          </div>
+        </div>
+        <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px; background:linear-gradient(160deg,#fbf6e6,#f6ecd2); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:16.5px; font-weight:700; line-height:1.25; margin-bottom:6px;">Smart Investing<br/>starts here</div>
+            <div style="font-size:12.5px; color:#7a7568; line-height:1.5;">Explore strategies to grow your wealth effortlessly.</div>
+          </div>
+          <button class="btn btn-sm" style="margin-top:14px; align-self:flex-start;" onclick="location.hash='#/deposits'">Discover</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="min-width:0;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+        <div class="section-label">Transactions</div>
+        <a href="#/transactions" class="icon-btn" style="width:32px;height:32px;">${icon('upRight')}</a>
+      </div>
+      <div style="margin-bottom:24px;">
+        ${TXNS.slice(0,6).map(t=>`
+          <div class="row">
+            <div class="row-left">
+              ${avatarHTML(t.n, t.bg)}
+              <div>
+                <div class="row-name">${t.n}</div>
+                <div class="row-sub">${t.d}</div>
+              </div>
+            </div>
+            <div class="row-amt ${t.amt>=0?'up':'down'}">${fmt(t.amt)}</div>
+          </div>`).join('')}
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+        <div class="section-label">Savings</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        ${SAVINGS.map(s=>`
+          <div style="display:flex; align-items:center; gap:11px; padding:9px 0;">
+            <div class="goal-icon" style="background:${s.bg};">${icon(s.icon)}</div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div class="row-name">${s.name}</div>
+                <div style="font-size:13px; font-weight:700;">${s.pct}%</div>
+              </div>
+              <div class="row-sub">$${s.have} / $${s.goal}</div>
+              <div class="progress-track"><div class="progress-fill" style="width:${s.pct}%; background:${s.pct>60?'var(--green)':'#e0d19a'};"></div></div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <button class="btn" style="width:100%; justify-content:center;" onclick="openGoalModal()">${icon('plus')} New goal</button>
+    </div>
+  </div>`;
+}
+
+function renderTransactions(){
+  const list = [...TXNS, ...TXNS.slice(0,3).map(t=>({...t, d:'12 Feb'}))];
+  return `
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
+    <div class="search-wrap" style="flex:1; min-width:200px;">
+      ${icon('search')}<input class="input" placeholder="Search transactions" />
+    </div>
+    <button class="chip active">All</button>
+    <button class="chip">Income</button>
+    <button class="chip">Expenses</button>
+    <button class="chip">${icon('filter')} <span style="margin-left:4px;">Filter</span></button>
+  </div>
+  <div class="table-head" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; padding:0 2px 10px;">
+    <div>Merchant</div><div>Category</div><div>Date</div><div style="text-align:right;">Amount</div>
+  </div>
+  ${list.map(t=>`
+    <div class="row" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; align-items:center;">
+      <div class="row-left">
+        ${avatarHTML(t.n, t.bg)}
+        <div class="row-name">${t.n}</div>
+      </div>
+      <div><span class="tag">${t.c}</span></div>
+      <div class="row-sub">${t.d}</div>
+      <div class="row-amt ${t.amt>=0?'up':'down'}" style="text-align:right;">${fmt(t.amt)}</div>
+    </div>`).join('')}
+  <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:20px;">
+    <button class="icon-btn" style="width:34px;height:34px;">${icon('chevL')}</button>
+    <span class="chip active" style="padding:8px 13px;">1</span>
+    <span class="chip">2</span>
+    <span class="chip">3</span>
+    <button class="icon-btn" style="width:34px;height:34px;">${icon('chevR')}</button>
+  </div>`;
+}
+
+function renderPayments(){
+  return `
+  <div class="grid-2" style="grid-template-columns:1.5fr 1fr; align-items:start;">
+    <div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+        <div class="section-label">Recent payments</div>
+        <button class="btn btn-sm">${icon('send')} Send payment</button>
+      </div>
+      ${PAYMENTS.map(p=>`
+        <div class="row">
+          <div class="row-left">
+            ${avatarHTML(p.to, p.bg)}
+            <div>
+              <div class="row-name">${p.name}</div>
+              <div class="row-sub">To ${p.to} \u00b7 ${p.d}</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="row-amt down">\u2212$${p.amt.toFixed(2)}</div>
+            <span class="tag tag-${p.status}" style="margin-top:4px; display:inline-block;">${p.status}</span>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div>
+      <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px; margin-bottom:18px;">
+        <div class="section-label" style="margin-bottom:14px;">Quick send</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <input class="input" style="padding-left:14px;" placeholder="Recipient name or email" />
+          <input class="input" style="padding-left:14px;" placeholder="Amount" />
+          <button class="btn" style="justify-content:center;">${icon('send')} Send now</button>
+        </div>
+      </div>
+      <div class="section-label" style="margin-bottom:12px;">Recipients</div>
+      ${RECIPIENTS.map(r=>`
+        <div class="row">
+          <div class="row-left">
+            ${avatarHTML(r.name, r.bg)}
+            <div>
+              <div class="row-name">${r.name}</div>
+              <div class="row-sub">${r.role}</div>
+            </div>
+          </div>
+          <button class="icon-btn" style="width:32px;height:32px;">${icon('send')}</button>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderDeposits(){
+  return `
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+    <div class="page-sub">3 active deposit accounts</div>
+    <button class="btn btn-sm">${icon('plus')} Add deposit</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:28px;">
+    ${DEPOSITS.map(d=>`
+      <div style="border:1px solid #f0ebda; border-radius:18px; padding:17px; background:#fbf9f3;">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <div class="row-name">${d.name}</div>
+          <span class="pill pill-up">${d.rate}</span>
+        </div>
+        <div style="font-size:22px; font-weight:700; margin-top:10px;">${fmtPlain(d.balance)}</div>
+        <div class="row-sub" style="margin-top:2px;">${d.term}</div>
+        ${sparklineSVG(d.spark,'#2f8f5b')}
+      </div>`).join('')}
+  </div>
+  <div class="section-label" style="margin-bottom:10px;">History</div>
+  ${DEPOSIT_HISTORY.map(h=>`
+    <div class="row">
+      <div class="row-left">
+        <div class="avatar-sm" style="background:#efe9d8; color:#57534a;">${icon('piggy')}</div>
+        <div>
+          <div class="row-name">${h.n}</div>
+          <div class="row-sub">${h.d}</div>
+        </div>
+      </div>
+      <div class="row-amt up">+$${h.amt.toFixed(2)}</div>
+    </div>`).join('')}`;
+}
+
+function renderInvoices(){
+  return `
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+    <div style="display:flex; gap:8px;">
+      <button class="chip active">All</button>
+      <button class="chip">Paid</button>
+      <button class="chip">Pending</button>
+      <button class="chip">Overdue</button>
+    </div>
+    <button class="btn btn-sm">${icon('plus')} Create invoice</button>
+  </div>
+  <div class="grid-2">
+    ${INVOICES.map(i=>`
+      <div style="border:1px solid #f0ebda; border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          ${avatarHTML(i.client, null)}
+          <div>
+            <div class="row-name">${i.id} \u00b7 ${i.client}</div>
+            <div class="row-sub">${i.d}</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="row-amt">${fmtPlain(i.amt)}</div>
+          <span class="tag tag-${i.status}" style="margin-top:4px; display:inline-block;">${i.status}</span>
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderCards(){
+  return `
+  <div style="display:flex; gap:14px; overflow-x:auto; padding-bottom:10px; margin-bottom:26px;" class="scrollbar-thin">
+    ${ACCOUNTS.map(a=>`
+      <div class="acct-card" style="background:${a.bg}; min-width:260px; min-height:150px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+          <div class="acct-label">${a.type}</div>
+          ${icon('logo','icon-lg')}
+        </div>
+        <div>
+          <div class="acct-balance">${a.balance}</div>
+          <div class="acct-name" style="margin-top:8px;">${a.name}</div>
+          <div class="acct-num">\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022 ${a.num}</div>
+        </div>
+      </div>`).join('')}
+    <div class="acct-card" style="min-width:260px; min-height:150px; border:1.5px dashed #d8cea3; background:transparent; align-items:center; justify-content:center; display:flex;">
+      <button class="btn btn-ghost">${icon('plus')} Add new card</button>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px;">
+      <div class="section-label" style="margin-bottom:14px;">Card details \u2014 \u2022\u2022 9250</div>
+      <div class="row"><div class="row-sub">Spending limit</div><div class="row-name">$2,500 / mo</div></div>
+      <div class="row"><div class="row-sub">Expires</div><div class="row-name">08 / 29</div></div>
+      <div class="row"><div class="row-sub">Status</div><span class="tag tag-completed">Active</span></div>
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        <button class="btn btn-ghost btn-sm">${icon('freeze')} Freeze card</button>
+        <button class="btn btn-ghost btn-sm">${icon('lock')} Set PIN</button>
+      </div>
+    </div>
+    <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px;">
+      <div class="section-label" style="margin-bottom:14px;">Recent card activity</div>
+      ${CARD_TXNS.map(t=>`
+        <div class="row">
+          <div class="row-left">
+            ${avatarHTML(t.n, null)}
+            <div>
+              <div class="row-name">${t.n}</div>
+              <div class="row-sub">${t.d} \u00b7 ${t.card}</div>
+            </div>
+          </div>
+          <div class="row-amt down">${fmt(t.amt)}</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderSettings(){
+  return `
+  <div class="grid-2" style="grid-template-columns:1fr 1fr; align-items:start;">
+    <div>
+      <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px; margin-bottom:16px;">
+        <div class="section-label" style="margin-bottom:16px;">Profile</div>
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+          <div class="avatar" style="width:56px; height:56px; font-size:18px;">${currentUserInitials}</div>
+          <div>
+            <div class="row-name" style="font-size:15px;">${currentUserName}</div>
+            <div class="row-sub">${currentUserEmail}</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="margin-left:auto;">${icon('edit')} Edit</button>
+        </div>
+        <div class="row"><div class="row-sub">Full name</div><div class="row-name">${currentUserName}</div></div>
+        <div class="row"><div class="row-sub">Phone</div><div class="row-name">+1 (555) 019\u20132231</div></div>
+        <div class="row"><div class="row-sub">Country</div><div class="row-name">United States</div></div>
+      </div>
+      <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px;">
+        <div class="section-label" style="margin-bottom:14px;">Security</div>
+        <div class="row"><div class="row-name">Change password</div><button class="btn btn-ghost btn-sm">Update</button></div>
+        <div class="row"><div><div class="row-name">Two-factor authentication</div><div class="row-sub">Adds a code step at sign-in</div></div><button class="toggle on" onclick="this.classList.toggle('on')"><span class="knob"></span></button></div>
+        <div class="row"><div><div class="row-name">Login alerts</div><div class="row-sub">Email me on new device sign-in</div></div><button class="toggle on" onclick="this.classList.toggle('on')"><span class="knob"></span></button></div>
+      </div>
+    </div>
+    <div>
+      <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px; margin-bottom:16px;">
+        <div class="section-label" style="margin-bottom:14px;">Notifications</div>
+        <div class="row"><div class="row-name">Transaction alerts</div><button class="toggle on" onclick="this.classList.toggle('on')"><span class="knob"></span></button></div>
+        <div class="row"><div class="row-name">Weekly summary</div><button class="toggle on" onclick="this.classList.toggle('on')"><span class="knob"></span></button></div>
+        <div class="row"><div class="row-name">Product updates</div><button class="toggle" onclick="this.classList.toggle('on')"><span class="knob"></span></button></div>
+        <div class="row"><div class="row-name">Marketing emails</div><button class="toggle" onclick="this.classList.toggle('on')"><span class="knob"></span></button></div>
+      </div>
+      <div style="border:1px solid #f0ebda; border-radius:18px; padding:18px;">
+        <div class="section-label" style="margin-bottom:14px;">Linked accounts</div>
+        <div class="row"><div class="row-left">${avatarHTML('Chase Bank', null)}<div class="row-name">Chase Bank</div></div><span class="tag tag-completed">Linked</span></div>
+        <div class="row"><div class="row-left">${avatarHTML('PayPal', null)}<div class="row-name">PayPal</div></div><span class="tag tag-completed">Linked</span></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px;">${icon('plus')} Link another account</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderHelp(){
+  return `
+  <div class="search-wrap" style="margin-bottom:22px; max-width:480px;">
+    ${icon('search')}<input class="input" placeholder="Search for answers" />
+  </div>
+  <div class="grid-3" style="margin-bottom:28px;">
+    <div style="border:1px solid #f0ebda; border-radius:16px; padding:16px; text-align:center;">
+      <div style="width:38px;height:38px;border-radius:11px;background:var(--blue); display:flex; align-items:center; justify-content:center; margin:0 auto 10px;">${icon('chat')}</div>
+      <div class="row-name">Live chat</div>
+      <div class="row-sub">Avg. reply in 2 min</div>
+    </div>
+    <div style="border:1px solid #f0ebda; border-radius:16px; padding:16px; text-align:center;">
+      <div style="width:38px;height:38px;border-radius:11px;background:var(--tan); display:flex; align-items:center; justify-content:center; margin:0 auto 10px;">${icon('mail')}</div>
+      <div class="row-name">Email us</div>
+      <div class="row-sub">support@wealthify.app</div>
+    </div>
+    <div style="border:1px solid #f0ebda; border-radius:16px; padding:16px; text-align:center;">
+      <div style="width:38px;height:38px;border-radius:11px;background:var(--pink); display:flex; align-items:center; justify-content:center; margin:0 auto 10px;">${icon('phone')}</div>
+      <div class="row-name">Call support</div>
+      <div class="row-sub">Mon\u2013Fri, 9am\u20136pm</div>
+    </div>
+  </div>
+  <div class="section-label" style="margin-bottom:6px;">Frequently asked questions</div>
+  <div>
+    ${FAQS.map((f,i)=>`
+      <div class="faq-item" data-i="${i}">
+        <div class="faq-q" onclick="toggleFaq(${i})">
+          <span style="flex:1;">${f.q}</span>${icon('chevR','chev')}
+        </div>
+        <div class="faq-a">${f.a}</div>
+      </div>`).join('')}
+  </div>`;
+}
+function toggleFaq(i){
+  document.querySelector(`.faq-item[data-i="${i}"]`).classList.toggle('open');
+}
+
+/* ---------------- ROUTING ---------------- */
+let currentUserName = 'Bessie Ortiz';
+let currentUserInitials = 'BO';
+let currentUserEmail = 'bessie.ortiz@email.com';
+const PAGES = {
+  overview: renderOverview, transactions: renderTransactions, payments: renderPayments,
+  deposits: renderDeposits, invoices: renderInvoices, cards: renderCards,
+  settings: renderSettings, help: renderHelp,
+};
+
+function scrollStocks(dir){
+  const el = document.getElementById('stockRow');
+  if(el) el.scrollBy({left: dir*180, behavior:'smooth'});
+}
+
+function router(){
+  const hash = location.hash.replace('#/','') || 'overview';
+  const route = PAGES[hash] ? hash : 'overview';
+  document.getElementById('page-outlet').innerHTML = PAGES[route]();
+  document.getElementById('pageTitle').textContent = TITLES[route][0];
+  document.getElementById('pageSub').textContent = route === 'overview' ? ('Welcome back, ' + currentUserName.split(' ')[0]) : TITLES[route][1];
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    el.classList.toggle('active', el.dataset.id === route);
+  });
+  window.scrollTo({top:0, behavior:'instant'});
+}
+window.addEventListener('hashchange', router);
+router();
+
+/* ---------------- AUTH SCREEN ---------------- */
+document.getElementById('authLogoMark').innerHTML = icon('logo','icon-lg');
+let authMode = 'signin';
+
+function setAuthMode(mode){
+  authMode = mode;
+  const isSignup = mode === 'signup';
+  document.getElementById('tabSignin').classList.toggle('active', !isSignup);
+  document.getElementById('tabSignup').classList.toggle('active', isSignup);
+  document.getElementById('fieldName').style.display = isSignup ? 'block' : 'none';
+  document.getElementById('rememberRow').style.display = isSignup ? 'none' : 'flex';
+  document.getElementById('authSubmitBtn').textContent = isSignup ? 'Create account' : 'Sign in';
+  document.getElementById('authSwitchLine').innerHTML = isSignup
+    ? 'Already have an account? <a href="#" onclick="event.preventDefault(); setAuthMode(\'signin\');">Sign in</a>'
+    : 'Don\u2019t have an account? <a href="#" onclick="event.preventDefault(); setAuthMode(\'signup\');">Sign up free</a>';
+  document.getElementById('authError').style.display = 'none';
+}
+
+function handleAuthSubmit(e){
+  if(e && e.preventDefault) e.preventDefault();
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if(!emailOk || password.length < 4 || (authMode === 'signup' && !name)){
+    document.getElementById('authError').style.display = 'block';
+    return false;
+  }
+  document.getElementById('authError').style.display = 'none';
+  const displayName = name || (email ? email.split('@')[0].replace(/[._]/g,' ') : '');
+  if(displayName){
+    currentUserName = displayName.replace(/\b\w/g, c => c.toUpperCase());
+    currentUserInitials = currentUserName.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('') || 'BO';
+  }
+  if(email) currentUserEmail = email;
+  showApp();
+  return false;
+}
+
+function showApp(){
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appShell').style.display = 'block';
+  document.getElementById('topAvatar').textContent = currentUserInitials;
+  document.getElementById('pageSub').textContent = 'Welcome back, ' + currentUserName.split(' ')[0];
+  location.hash = '#/overview';
+  router();
+}
+
+function doLogout(){
+  document.getElementById('appShell').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('authForm').reset();
+  currentUserName = 'Bessie Ortiz';
+  currentUserInitials = 'BO';
+  currentUserEmail = 'bessie.ortiz@email.com';
+  setAuthMode('signin');
+  location.hash = '';
+}
+</script>
+</body>
+</html>
